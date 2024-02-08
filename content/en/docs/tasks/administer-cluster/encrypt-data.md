@@ -50,12 +50,27 @@ to either:
 
 <!-- steps -->
 
-## Configuration and determining whether encryption at rest is already enabled
+## Determine whether encryption at rest is already enabled {#determining-whether-encryption-at-rest-is-already-enabled}
+
+By default, the API server stores plain-text representations of resources into etcd, with
+no at-rest encryption.
 
 The `kube-apiserver` process accepts an argument `--encryption-provider-config`
-that controls how API data is encrypted in etcd.
-The configuration is provided as an API named
-[`EncryptionConfiguration`](/docs/reference/config-api/apiserver-encryption.v1/). An example configuration is provided below.
+that specifies a path to a configuration file. The contents of that file, if you specify one,
+control how Kubernetes API data is encrypted in etcd.
+If you are running the kube-apiserver without the `--encryption-provider-config` command line
+argument, you do not have encryption at rest enabled. If you are running the kube-apiserver
+with the `--encryption-provider-config` command line argument, and the file that it references
+specifies the `identity` provider as the first encryption provider in the list, then you
+do not have at-rest encryption enabled
+(**the default `identity` provider does not provide any confidentiality protection.**)
+
+If you are running the kube-apiserver
+with the `--encryption-provider-config` command line argument, and the file that it references
+specifies a provider other than `identity` as the first encryption provider in the list, then
+you already have at-rest encryption enabled. However, that check does not tell you whether
+a previous migration to encrypted storage has succeeded. If you are not sure, see
+[ensure all relevant data are encrypted](#ensure-all-secrets-are-encrypted).
 
 {{< caution >}}
 **IMPORTANT:** For high-availability configurations (with two or more control plane nodes), the
@@ -324,6 +339,10 @@ appropriate for your security needs.
 
 ### Generate the encryption key {#generate-key-no-kms}
 
+The following steps assume that you are not using KMS, and therefore the steps also
+assume that you need to generate an encryption key. If you already have an encryption key,
+skip to [Write an encryption configuration file](#write-an-encryption-configuration-file).
+
 {{< caution >}}
 Storing the raw encryption key in the EncryptionConfig only moderately improves your security posture,
 compared to no encryption.
@@ -374,6 +393,15 @@ Generate a 32-byte random key and base64 encode it. You can use this command:
 Keep the encryption key confidential, including whilst you generate it and
 ideally even after you are no longer actively using it.
 {{< /note >}}
+
+### Replicate the encryption key
+
+Using a secure mechanism for file transfer, make a copy of that encryption key
+available to every other control plane host.
+
+At a minimum, use encryption in transit - for example, secure shell (SSH). For more
+security, use asymmetric encryption between hosts, or change the approach you are using
+so that you're relying on KMS encryption.
 
 ### Write an encryption configuration file
 
@@ -573,7 +601,7 @@ as plaintext.
 
 {{< warning >}}
 Making this change prevents the API server from retrieving resources that are marked
-as encrypted as rest, but are actually stored in the clear.
+as encrypted at rest, but are actually stored in the clear.
 
 When you have configured encryption at rest for an API (for example: the API kind
 `Secret`, representing `secrets` resources in the core API group), you **must** ensure
