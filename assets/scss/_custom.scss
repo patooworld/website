@@ -1,5 +1,10 @@
 $announcement-size-adjustment: 8px;
 
+// Although most of the site is documentation, that's not the only thing
+// on the site. This file has customizations not specific to documentation.
+
+// For documentation styles, see _documentation.scss
+
 /* GLOBAL */
 .td-main {
   .row {
@@ -266,15 +271,25 @@ body.td-404 main .error-details {
 
 /* FOOTER */
 footer {
-  background-color: #303030;
+  background-color: #202020;
+  /* darkened later in this file */
   background-image: url("/images/texture.png");
   padding: 1rem !important;
   min-height: initial !important;
+  justify-content: center;
 
   > div, > p {
     max-width: 95%;
     @media only screen and (min-width: 768px) {
       max-width: calc(min(80rem,90vw)); // avoid spreading too wide
+    }
+    color: inherit;
+    background: transparent;
+
+    a:hover {
+      color: inherit;
+      background: transparent;
+      text-decoration: underline;
     }
   }
 
@@ -313,6 +328,50 @@ footer {
   }
 }
 
+footer {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)) , url("/images/texture.png");
+  color: #e9e9e9;
+}
+
+// Custom footer sizing
+@media (min-width: 800px) and (max-width: 1279px) {
+  footer {
+    ul.footer-icons {
+      min-width: 17.5vw;
+      display: flex;
+      flex-wrap: nowrap;
+      flex-direction: row;
+      justify-content: space-evenly;
+    }
+    .col-sm-2 {
+      flex: 0 0 22.5%;
+      max-width: 22.5%;
+    }
+    .footer-main.text-center {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+
+  }
+}
+
+
+@media (max-width: 799px) {
+  footer ul.footer-icons {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 0.5em;
+  }
+  footer div.order-1 ul.footer-icons {
+    margin-left: auto;
+  }
+  footer div.order-3 ul.footer-icons {
+    margin-right: auto;
+  }
+}
+
 /* SIDE-DRAWER MENU */
 
 .pi-pushmenu .sled {
@@ -339,285 +398,15 @@ footer {
   }
 }
 
-/* DOCS */
 
-.launch-cards {
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  row-gap: 1em;
-  .launch-card {
-    display: flex;
-    padding: 0 30px 0 0;
-    .card-content{
-      width: fit-content;
-      display: flex;
-      flex-direction: column;
-      margin: 0;
-      row-gap: 1em;
-      h2 {
-        font-size: 1.75em;
-        padding: 0.5em 0;
-        margin: 0;
-        a {
-          display: none;
-        }
-      }
-  
-      p {
-        margin: 0;
-      }
-  
-      ul {
-        list-style: none;
-        height: fit-content;
-        line-height: 1.6;
-        padding: 0;
-        margin-block-end: auto;
-      }
-  
-      br {
-        display: none;
-      }
-  
-      button {
-        height: min-content;
-        width: auto;
-        padding: .5em 1em;
-        cursor: pointer;
-        box-sizing: border-box;
-      }
-    }
-    }
+/* COMMUNITY */
 
-  @media only screen and (max-width: 1000px) {
-    grid-template-columns: 1fr;
-  
-    .launch-card {
-      width: 100%;
-    }
-}
-}
-
-
-// table of contents
-.td-toc {
-  padding-top: 1.5rem !important;
-  top: 5rem !important;
-
-  @supports (position: sticky) {
-    position: sticky !important;
-    height: calc(100vh - 10rem);
-    overflow-y: auto;
-  }
-
-  #TableOfContents {
-    padding-top: 1rem;
-  }
-}
-
-main {
-
-/* SCSS Related to the Metrics list */
-
-  div.metric:nth-of-type(odd) { // Look & Feel , Aesthetics
-    background-color: $light-grey;
-  }
-
-  div.metrics {
-
-    .metric {
-      div:empty{
-        display: none;
-      }
-
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      gap: .75em;
-      padding:.75em .75em .75em .75em;
-  
-      .metric_name{
-        font-size: large;
-        font-weight: bold;
-        word-break: break-word;
-      }
-  
-      label{
-        font-weight: bold;
-        margin-right: .5em;
-      }
-      ul {
-        li:empty{
-          display: none;
-        }
-        display: flex;
-        flex-direction: column;
-        gap: .75em;
-        flex-wrap: wrap;
-        li.metric_labels_varying{
-          span{
-                display: inline-block;
-                background-color: rgb(240, 239, 239);
-                padding: 0 0.5em;
-                margin-right: .35em;
-                font-family: monospace;
-                border: 1px solid rgb(230 , 230 , 230);
-                border-radius: 5%;
-                margin-bottom: .35em;
-          }
-        }
-  
-      }
-      
-    }
-
-
-  }
-}
-
-// blockquotes and callouts
-
-body {
-  .alert {
-    // Override Docsy styles
-    padding: 0.4rem 0.4rem 0.4rem 1rem;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-    border-right: 1px solid #eee;
-    border-radius: 0.25em;
-    border-left-width: 0.5em; // fallback in case calc() is missing
-    background: #fff;
-    color: #000;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-  }
-  // Set minimum width and radius for alert color
-  .alert {
-      border-left-width: calc(max(0.5em, 4px));
-      border-top-left-radius: calc(max(0.5em, 4px));
-      border-bottom-left-radius: calc(max(0.5em, 4px));
-      padding-top: 0.75rem;
-  }
-  .alert.alert-caution {
-    border-left-color: #f0ad4e;
-  }
-  .alert.alert-info {
-    border-left-color: #428bca;
-    h4, h4.alert-heading {
-      color: #000;
-      display: block;
-      float: initial;
-      font-size: 1rem;
-      padding: 0;
-      padding-right: 0.5rem;
-      margin: 0;
-      line-height: 1.5;
-      font-weight: bolder;
-    }
-  }
-  .alert.alert-caution {
-    border-left-color: #f0ad4e;
-    h4, h4.alert-heading {
-      font-size: 1em;
-      font-weight: bold;
-    }
-  }
-  .alert.alert-warning {
-    border-left-color: #d9534f;
-  }
-  .alert.third-party-content {
-    border-left-color: #444;
-  }
-
-  h1:first-of-type + .alert.callout {
-    margin-top: 1.5em;
-  }
-
-  div.feature-state-notice {
-    background-color: #daeaf9;
-    border-radius: 0.75rem;
-    padding: 1rem;
-    margin-bottom: 1em;
-
-    font-size: 1.2em;
-
-    > .feature-state-name::before {
-      content: 'ⓘ  ';
-      color: #326ce5; // Kubernetes blue
-    }
-    > .feature-state-name {
-      display: inline-block;
-      font-size: 0.95em;
-      font-weight: bold;
-      color: #000;
-      background-color: #daeaf9;
-    }
-
-    code {
-      color: #000;
-      font-size: 1em;
-      background-color: #daeaf9;
-    }
-
-    margin-right: 2em;
-    max-width: 80%;
-  }
-}
-
-// Special color for third party content disclaimers
-.alert.third-party-content { border-left-color: #222 };
-
-// Highlight disclaimer when targeted as a fragment
-
-#third-party-content-disclaimer {
-  color: #000;
-  background: #f8f9fa;
-  transition: all 0.5s ease;
-}
-
-@keyframes disclaimer-highlight {
-  from { background: #f8f922; color: #000; }
-  50% { background: #f8f944; color: #000; }
-  to { background: #f8f9cb; color: #000; }
-}
-
-#third-party-content-disclaimer:target {
-  color: #000;
-  animation: disclaimer-highlight 1.25s ease;
-  background: #f8f9cb;
-}
-
-.deprecation-warning, .pageinfo.deprecation-warning {
-    padding: clamp(10px, 2vmin, 20px);
-    margin: clamp(10px, 1vh, 20px) 0;
-    background-color: #faf5b6;
-    color: #000;
-}
-
-.deprecation-warning.outdated-blog, .pageinfo.deprecation-warning.outdated-blog {
-    background-color: $blue;
-    color: $white;
-}
-
-body.td-home .deprecation-warning, body.td-blog .deprecation-warning, body.td-documentation .deprecation-warning {
-    border-radius: 3px;
-}
-
-.deprecation-warning p:only-child {
-  margin-bottom: 0;
-}
-
-.td-documentation .td-content > .highlight {
-  max-width: initial;
-  width: 100%;
-}
-
-body.td-home #deprecation-warning {
-    max-width: 1000px;
-    margin-top: 2.5rem;
+body.cid-community {
+  section.linkbox {
+    max-width: clamp(50%, calc(100em + 2vw), 100vw);
     margin-left: auto;
     margin-right: auto;
+  }
 }
 
 #caseStudies body > #deprecation-warning, body.cid-casestudies > #deprecation-warning, body.cid-community > #deprecation-warning {
@@ -669,13 +458,6 @@ body.cid-partners {
         margin-bottom: 2em;
     }
 
-    /*  COLUMN SETUP  */
-    .col {
-        display: block;
-        float:left;
-        margin: 1% 0 1% 1.6%;
-        background-color: #f9f9f9;
-    }
     .col:first-child { margin-left: 0; }
 
 
@@ -1318,29 +1100,6 @@ div.alert > em.javascript-required {
     background: #326de6;
 }
 
-// Adjust Bing search result page
-#bing-results-container {
-    padding: 1em;
-}
-.bing-result {
-  margin-bottom: 1em;
-}
-.bing-result-url {
-  font-size: 14px;
-}
-.bing-result-snippet {
-  color: #666666;
-  font-size: 14px;
-}
-#bing-pagination-container {
-    padding: 1em;
-    margin-bottom: 1em;
-
-    a.bing-page-anchor {
-        padding: 0.5em;
-        margin: 0.25em;
-    }
-}
 
 // Adjust Search-bar search-icon
 .search-bar {
@@ -1370,6 +1129,65 @@ div.alert > em.javascript-required {
   border: none;
   outline: none;
   padding: .5em 0 .5em 0;
+}
+
+// PageFind Styles
+
+#search .pagefind-ui form input  {
+  background-color: #fff;
+  border: 1px solid #4c4c4c;
+  border-radius: 20px; 
+  overflow-x: hidden;
+  width: auto;
+  padding: 6px 10px !important;
+  margin: 20px 10px 20px 0;
+
+  &:focus-within {
+    outline: 1.5px solid rgba(47, 135, 223, 0.7);
+    border: 1px solid rgba(47, 135, 223, 0.7);
+  }
+}
+
+#search .pagefind-ui ol.pagefind-ui__results {
+  padding-left: 0;
+}
+
+#search .pagefind-ui .pagefind-ui__result-nested {
+  padding-left: 2em;
+}
+
+#search .pagefind-ui.pagefind-ui__result-nested::before {
+  content: "\2937 ";
+  color: $blue;
+}
+
+#search .pagefind-ui ol > li {
+  list-style-type: none;
+  border-top: 1.5px solid rgba(47, 135, 223, 0.7);
+  padding: 10px;
+}
+
+#search .pagefind-ui button {
+  color: #fff;
+  background-color: $blue;
+  border-radius: 0.2em;
+  border: 0.1rem solid $medium-grey;
+  padding: 0.3em;
+}
+
+#search .pagefind-ui__result-tags {
+  font-size: 14px;
+  font-weight: 400;
+}
+
+#search a.pagefind-ui__result-link {
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+body.td-search #search {
+  margin-top: 1rem;
+  margin-bottom: 3rem;
 }
 
 /* CSS for 'figure' full-screen display */
@@ -1415,89 +1233,6 @@ div.alert > em.javascript-required {
   padding: 0.2rem;
 }
 
-// Special style for Kubernetes' 10th birthday
-section.k8s-birthday-override {
-  background: #dae9f9; // Kubernetes light blue
-
-  > .k8s-birthday-wrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    align-content: flex-end;
-    gap: 2rem;
-
-    img.birthday-banner {
-      max-height: 20rem;
-      max-width: 100vw;
-      margin-left: auto;
-      margin-right: auto;
-      aspect-ratio: 1;
-      flex-grow: 1;
-    }
-    p {
-      flex-grow: 4;
-      text-align: center;
-      color: $blue;
-      font-size: 2.5em;
-      padding-bottom: 2.5rem;
-      margin: 1em;
-    }
-  }
-
-  div.k8s-birthday-override.revert-to-previous {
-    form {
-      display: block;
-      max-width: clamp(20rem, 30%, 100vw);
-      margin-left: auto;
-      padding-bottom: 0.5rem;
-    }
-    text-align: right;
-    label {
-      color: $blue;
-      padding-left: 1.2em;
-      padding-right: 1.2em;
-      text-decoration: underline;
-      font-size: 1.5rem;
-    }
-    input {
-      accent-color: $blue;
-      border-color: $blue;
-      visibility: hidden;
-    }
-  }
-
-  div.k8s-birthday-override.revert-to-previous:has(input:not(:checked)) {
-    display: initial;
-  }
-
-  &:has(input:checked) {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 900px) {
-  section.k8s-birthday-override > .k8s-birthday-wrapper {
-    flex-wrap: wrap;
-  }
-}
-
-@media screen and (max-width: 900px) {
-  section.k8s-birthday-override > .k8s-birthday-wrapper {
-    gap: 0.2rem;
-    align-content: center;
-    p {
-      font-size: initial;
-      min-width: 80vw;
-    }
-    img.birthday-banner {
-      min-height: initial;
-    }
-    label {
-      font-size: 1.2rem;
-    }
-  }
-}
 @media screen and (max-aspect-ratio: 9/15) {
     gap: 0.4rem;
 }
@@ -1510,4 +1245,15 @@ section.k8s-birthday-override {
 section.k8s-birthday-override:has(div.k8s-birthday-override.revert-to-previous input:not(:checked)) + section {
   display: none;
   visibility: hidden;
+}
+
+/* Apply site-wide table styles for tables in alert callouts (note, caution, warning) */
+.alert {
+  &.alert-info, &.alert-caution, &.alert-danger {
+    > table {
+    @extend .table-striped;
+    @extend .table-responsive;
+    @extend .table;
+    }
+  }
 }

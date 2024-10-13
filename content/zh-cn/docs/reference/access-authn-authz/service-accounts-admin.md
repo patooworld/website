@@ -109,7 +109,7 @@ Kubernetes 区分用户账号和服务账号的概念，主要基于以下原因
 <!--
 ## Bound service account tokens
 -->
-## 绑定的服务账户令牌  {#bound-service-account-tokens}
+## 绑定的服务账号令牌  {#bound-service-account-tokens}
 
 <!--
 ServiceAccount tokens can be bound to API objects that exist in the kube-apiserver.
@@ -134,6 +134,9 @@ stored as extra 'private claims' in the issued JWT.
 
 When a bound token is presented to the kube-apiserver, the service account authenticator
 will extract and verify these claims.
+If the referenced object or the ServiceAccount is pending deletion (for example, due to finalizers),
+then for any instant that is 60 seconds (or more) after the `.metadata.deletionTimestamp` date,
+authentication with that token would fail.
 If the referenced object no longer exists (or its `metadata.uid` does not match),
 the request will not be authenticated.
 -->
@@ -141,6 +144,9 @@ the request will not be authenticated.
 将作为额外的“私有声明”存储在所发布的 JWT 中。
 
 当将被绑定的令牌提供给 kube-apiserver 时，服务帐户身份认证组件将提取并验证这些声明。
+如果所引用的对象或 ServiceAccount 正处于删除中（例如，由于 finalizer 的原因），
+那么在 `.metadata.deletionTimestamp` 时间戳之后的 60 秒（或更长时间）后的某一时刻，
+使用该令牌进行身份认证将会失败。
 如果所引用的对象不再存在（或其 `metadata.uid` 不匹配），则请求将无法通过认证。
 
 <!--
@@ -279,6 +285,27 @@ Here's an example of how that looks for a launched Pod:
 
 以下示例演示如何查找已启动的 Pod：
 
+<!--
+```yaml
+...
+  - name: kube-api-access-<random-suffix>
+    projected:
+      sources:
+        - serviceAccountToken:
+            path: token # must match the path the app expects
+        - configMap:
+            items:
+              - key: ca.crt
+                path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+              - fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+                path: namespace
+```
+-->
 ```yaml
 ...
   - name: kube-api-access-<随机后缀>
@@ -497,7 +524,7 @@ ensures a ServiceAccount named "default" exists in every active namespace.
 -->
 ## 控制平面细节   {#control-plane-details}
 
-### ServiceAccount 控制器   {#serviceaccount-controller} 
+### ServiceAccount 控制器   {#serviceaccount-controller}
 
 ServiceAccount 控制器管理名字空间内的 ServiceAccount，
 并确保每个活跃的名字空间中都存在名为 `default` 的 ServiceAccount。
@@ -595,7 +622,7 @@ it does the following when a Pod is created:
 <!--
 ### Legacy ServiceAccount token tracking controller
 -->
-### 传统 ServiceAccount 令牌追踪控制器
+### 传统 ServiceAccount 令牌追踪控制器   {#legacy-serviceaccount-token-tracking-controller}
 
 {{< feature-state feature_gate_name="LegacyServiceAccountTokenTracking" >}}
 
@@ -607,12 +634,12 @@ account tokens began to be monitored by the system.
 -->
 此控制器在 `kube-system` 命名空间中生成名为
 `kube-apiserver-legacy-service-account-token-tracking` 的 ConfigMap。
-这个 ConfigMap 记录了系统开始监视传统服务账户令牌的时间戳。
+这个 ConfigMap 记录了系统开始监视传统服务账号令牌的时间戳。
 
 <!--
 ### Legacy ServiceAccount token cleaner
 -->
-### 传统 ServiceAccount 令牌清理器
+### 传统 ServiceAccount 令牌清理器   {#legacy-serviceaccount-token-cleaner}
 
 {{< feature-state feature_gate_name="LegacyServiceAccountTokenCleanUp" >}}
 
@@ -713,6 +740,9 @@ kubelet 确保该卷包含允许容器作为正确 ServiceAccount 进行身份�
 
 以下示例演示如何查找已启动的 Pod：
 
+<!--
+# decimal equivalent of octal 0644
+-->
 ```yaml
 ...
   - name: kube-api-access-<random-suffix>
@@ -871,6 +901,9 @@ Otherwise, first find the Secret for the ServiceAccount.
 -->
 否则，先找到 ServiceAccount 所用的 Secret。
 
+<!--
+# This assumes that you already have a namespace named 'examplens'
+-->
 ```shell
 # 此处假设你已有一个名为 'examplens' 的名字空间
 kubectl -n examplens get serviceaccount/example-automated-thing -o yaml

@@ -92,7 +92,7 @@ Where `<profile_type>` is one of:
 * `Localhost` to use a profile loaded on the host (see below)
 * `Unconfined` to run without AppArmor
 
-See the [API Reference](#api-reference) for the full details on the AppArmor profile API.
+See [Specifying AppArmor Confinement](#specifying-apparmor-confinement) for full details on the AppArmor profile API.
 
 To verify that the profile was applied, you can check that the container's root process is
 running with the correct profile by examining its proc attr:
@@ -126,7 +126,7 @@ profile k8s-apparmor-example-deny-write flags=(attach_disconnected) {
 }
 ```
 
-The profile needs to loaded onto all nodes, since you don't know where the pod will be scheduled.
+The profile needs to be loaded onto all nodes, since you don't know where the pod will be scheduled.
 For this example you can use SSH to install the profiles, but other approaches are
 discussed in [Setting up nodes with profiles](#setting-up-nodes-with-profiles).
 

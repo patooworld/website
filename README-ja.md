@@ -64,16 +64,19 @@ make container-serve
 ローカルで依存関係をインストールし、サイトを構築してテストするには、次のコマンドを実行します。
 
 - For macOS and Linux
+
   ```bash
   npm ci
   make serve
   ```
+  
 - For Windows (PowerShell)
+
   ```powershell
   npm ci
   hugo.exe server --buildFuture --environment development
   ```
-
+  
 これで、Hugoのサーバーが1313番ポートを使って起動します。使用しているブラウザで<http://localhost:1313>にアクセスしてください。リポジトリ内のソースファイルに変更を加えると、HugoがWebサイトの内容を更新してブラウザに反映します。
 
 ## API reference pagesをビルドする
@@ -166,7 +169,7 @@ sudo launchctl load -w /Library/LaunchDaemons/limit.maxfiles.plist
 
 ## ドキュメントに貢献する {#contributing-to-the-docs}
 
-GitHubの画面右上にある**Fork**ボタンをクリックすると、GitHubアカウントに紐付いた本リポジトリのコピーが作成されます。このコピーのことを*フォーク*と呼びます。フォークリポジトリの中では好きなように変更を加えることができます。加えた変更をこのリポジトリに反映したい好きなタイミングで、フォークリポジトリからPull Reqeustを作成してください。
+GitHubの画面右上にある**Fork**ボタンをクリックすると、GitHubアカウントに紐付いた本リポジトリのコピーが作成されます。このコピーのことを*フォーク*と呼びます。フォークリポジトリの中では好きなように変更を加えることができます。加えた変更をこのリポジトリに反映したい好きなタイミングで、フォークリポジトリからPull Requestを作成してください。
 
 Pull Requestが作成されると、レビュー担当者が責任を持って明確かつ実用的なフィードバックを返します。Pull Requestの所有者は作成者であるため、**自分自身で作成したPull Requestを編集し、フィードバックに対応するのはあなたの責任です。**
 
@@ -196,7 +199,7 @@ Kubernetesのドキュメントへの貢献に関する詳細については以�
 
 | 名前                       | Slack                      | GitHub                     |                   
 | -------------------------- | -------------------------- | -------------------------- |
-| Arsh Sharma                | @arsh                      | @RinkiyaKeDad              |
+| Sreeram Venkitesh                | @sreeram.venkitesh                      | @sreeram-venkitesh              |
 
 ## 翻訳された`README.md`一覧 {#localization-readmemds}
 
